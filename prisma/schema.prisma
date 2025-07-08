@@ -1,0 +1,116 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(uuid())
+  name        String
+  email       String   @unique
+  password    String
+  role        Role
+  company     Company? @relation(fields: [companyId], references: [id])
+  companyId   String?
+  applications Application[]
+  messages    Message[]
+  conversations Conversation[] @relation("UserConversations")
+  resumes     Resume[]
+  createdAt   DateTime @default(now())
+}
+
+enum Role {
+  SEEKER
+  COMPANY
+  ADMIN
+}
+
+model Company {
+  id        String   @id @default(uuid())
+  name      String
+  profile   String?
+  jobs      Job[]
+  users     User[]
+  createdAt DateTime @default(now())
+}
+
+model Job {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  salary      String?
+  experience  String?
+  location    String?
+  type        String?
+  company     Company  @relation(fields: [companyId], references: [id])
+  companyId   String
+  applications Application[]
+  createdAt   DateTime @default(now())
+  isActive    Boolean  @default(true)
+}
+
+model Application {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  job       Job      @relation(fields: [jobId], references: [id])
+  jobId     String
+  status    ApplicationStatus @default(PENDING)
+  message   String?
+  createdAt DateTime @default(now())
+}
+
+enum ApplicationStatus {
+  PENDING
+  SHORTLISTED
+  INTERVIEW
+  REJECTED
+  ACCEPTED
+}
+
+model Conversation {
+  id        String   @id @default(uuid())
+  user      User     @relation("UserConversations", fields: [userId], references: [id])
+  userId    String
+  company   Company  @relation(fields: [companyId], references: [id])
+  companyId String
+  messages  Message[]
+  createdAt DateTime @default(now())
+}
+
+model Message {
+  id             String   @id @default(uuid())
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  conversationId String
+  senderId       String
+  sender         User     @relation(fields: [senderId], references: [id])
+  content        String
+  createdAt      DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  content   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Resume {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  url       String
+  createdAt DateTime @default(now())
+}
