@@ -34,8 +34,9 @@ const jobs = [
   },
 ];
 
-export default function JobDetailsPage({ params }: { params: { jobId: string } }) {
-  const job = jobs.find((j) => j.id === Number(params.jobId));
+export default async function JobDetailsPage({ params }: { params: Promise<{ jobId: string }> }) {
+  const { jobId } = await params;
+  const job = jobs.find((j) => j.id === Number(jobId));
   if (!job) return notFound();
 
   return (
