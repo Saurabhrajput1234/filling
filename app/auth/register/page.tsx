@@ -51,8 +51,8 @@ export default function RegisterPage() {
         throw new Error(data.error || "Registration failed");
       }
 
-      // Store token in localStorage
-      localStorage.setItem("token", data.token);
+      // Store token in cookie
+      document.cookie = `token=${data.token}; path=/; max-age=2592000`; // 30 days
       
       // Update Redux state
       dispatch(login({
