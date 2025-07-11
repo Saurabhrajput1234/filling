@@ -35,6 +35,7 @@ export default function CompanyDashboard() {
   const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
+  const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -43,13 +44,15 @@ export default function CompanyDashboard() {
       return;
     }
 
-    fetchJobs();
-  }, [isAuthenticated, router]);
+    if (user?.companyId) {
+      fetchJobs();
+    }
+  }, [isAuthenticated, user?.companyId, router]);
 
   const fetchJobs = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("/api/jobs", {
+      const response = await fetch(`/api/jobs?companyId=${user?.companyId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -58,6 +61,8 @@ export default function CompanyDashboard() {
       if (response.ok) {
         const data = await response.json();
         setJobs(data);
+      } else {
+        console.error("Failed to fetch jobs:", response.status);
       }
     } catch (error) {
       console.error("Failed to fetch jobs:", error);
@@ -68,6 +73,9 @@ export default function CompanyDashboard() {
 
   const updateApplicationStatus = async (applicationId: string, status: string) => {
     try {
+      console.log('Updating application status:', applicationId, 'to', status);
+      setUpdatingStatus(applicationId);
+      
       const token = localStorage.getItem("token");
       const response = await fetch("/api/applications", {
         method: "PUT",
@@ -82,10 +90,18 @@ export default function CompanyDashboard() {
       });
 
       if (response.ok) {
+        console.log('Application status updated successfully');
         fetchJobs(); // Refresh data
+      } else {
+        const errorData = await response.json();
+        console.error("Failed to update application status:", errorData);
+        alert(`Failed to update status: ${errorData.error || 'Unknown error'}`);
       }
     } catch (error) {
       console.error("Failed to update application status:", error);
+      alert('Failed to update application status. Please try again.');
+    } finally {
+      setUpdatingStatus(null);
     }
   };
 
@@ -230,8 +246,8 @@ export default function CompanyDashboard() {
                         {job.applications.map((application) => (
                           <div key={application.id} className="flex items-center justify-between p-3 bg-gray-50 rounded">
                             <div>
-                              <p className="font-medium text-gray-900">{application.user.name}</p>
-                              <p className="text-sm text-gray-600">{application.user.email}</p>
+                              <p className="font-medium text-gray-900">{application.user?.name || 'Unknown User'}</p>
+                              <p className="text-sm text-gray-600">{application.user?.email || 'No email'}</p>
                               {application.message && (
                                 <p className="text-sm text-gray-500 mt-1">{application.message}</p>
                               )}
@@ -243,7 +259,8 @@ export default function CompanyDashboard() {
                               <select
                                 value={application.status}
                                 onChange={(e) => updateApplicationStatus(application.id, e.target.value)}
-                                className="text-xs border border-gray-300 rounded px-2 py-1"
+                                disabled={updatingStatus === application.id}
+                                className="text-xs border border-gray-300 rounded px-2 py-1 hover:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400 disabled:opacity-50"
                               >
                                 <option value="PENDING">Pending</option>
                                 <option value="SHORTLISTED">Shortlisted</option>

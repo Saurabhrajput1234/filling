@@ -22,25 +22,60 @@ export async function POST(req: NextRequest) {
         if (existing) {
           return NextResponse.json({ error: 'User already exists' }, { status: 409 });
         }
+        
         // Hash password
         const hashed = await bcrypt.hash(password, 10);
-        // Create user
+        
+        let companyId = null;
+        
+        // If registering as a company, create a company record
+        if (role === 'COMPANY') {
+          console.log('Creating company for user:', name);
+          
+          const company = await prisma.company.create({
+            data: {
+              name: name,
+              profile: `Company profile for ${name}`
+            }
+          });
+          
+          companyId = company.id;
+          console.log('Company created with ID:', companyId);
+        }
+        
+        // Create user with companyId if applicable
         const user = await prisma.user.create({
           data: {
             email,
             password: hashed,
             name: name || '',
             role: role || 'SEEKER',
+            companyId: companyId
           },
+          include: {
+            company: true
+          }
         });
         
         // Create JWT token for registration
-        const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
+        const token = jwt.sign({ 
+          id: user.id, 
+          email: user.email, 
+          role: user.role,
+          companyId: user.companyId 
+        }, JWT_SECRET, { expiresIn: '7d' });
         
         return NextResponse.json({ 
           message: 'User registered', 
           token,
-          user: { id: user.id, email: user.email, name: user.name, role: user.role } 
+          user: { 
+            id: user.id, 
+            email: user.email, 
+            name: user.name, 
+            role: user.role,
+            companyId: user.companyId,
+            company: user.company
+          } 
         }, { status: 201 });
       } catch (error) {
         console.error('Registration error:', error);
@@ -50,19 +85,44 @@ export async function POST(req: NextRequest) {
 
     if (action === 'login') {
       try {
-        // Find user
-        const user = await prisma.user.findUnique({ where: { email } });
+        // Find user with company information
+        const user = await prisma.user.findUnique({ 
+          where: { email },
+          include: {
+            company: true
+          }
+        });
+        
         if (!user) {
           return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
         }
+        
         // Check password
         const valid = await bcrypt.compare(password, user.password);
         if (!valid) {
           return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
         }
+        
         // Create JWT
-        const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
-        return NextResponse.json({ message: 'Login successful', token, user: { id: user.id, email: user.email, name: user.name, role: user.role } });
+        const token = jwt.sign({ 
+          id: user.id, 
+          email: user.email, 
+          role: user.role,
+          companyId: user.companyId 
+        }, JWT_SECRET, { expiresIn: '7d' });
+        
+        return NextResponse.json({ 
+          message: 'Login successful', 
+          token, 
+          user: { 
+            id: user.id, 
+            email: user.email, 
+            name: user.name, 
+            role: user.role,
+            companyId: user.companyId,
+            company: user.company
+          } 
+        });
       } catch (error) {
         console.error('Login error:', error);
         return NextResponse.json({ error: 'Login failed' }, { status: 500 });

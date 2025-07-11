@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = "postgresql://postgres:Garima%401234@localhost:5432/jobportal"
   
 }
 
@@ -36,6 +36,7 @@ model Company {
 
 model Job {
   id           String        @id @default(uuid())
+  jobId        String?       @unique // Custom job ID field
   title        String
   description  String
   salary       String?
