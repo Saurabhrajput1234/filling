@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import ReduxProvider from "../store/Provider";
 import AuthRehydrator from "../store/AuthRehydrator";
+import { SocketProvider } from "../lib/socketContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +22,9 @@ export default function RootLayout({
       <body className={inter.className}>
         <ReduxProvider>
           <AuthRehydrator />
-          {children}
+          <SocketProvider>
+            {children}
+          </SocketProvider>
         </ReduxProvider>
       </body>
     </html>

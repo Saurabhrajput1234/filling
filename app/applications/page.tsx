@@ -117,6 +117,33 @@ export default function ApplicationsPage() {
     }
   };
 
+  const startConversation = async (userId: string, userName: string) => {
+    try {
+      const response = await fetch("/api/conversations", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId,
+          companyId: user?.companyId,
+        }),
+      });
+
+      if (response.ok) {
+        const conversation = await response.json();
+        // Navigate to conversations page with the conversation ID
+        router.push(`/conversations?conversationId=${conversation.id}`);
+      } else {
+        console.error("Failed to start conversation");
+        alert('Failed to start conversation. Please try again.');
+      }
+    } catch (error) {
+      console.error("Failed to start conversation:", error);
+      alert('Failed to start conversation. Please try again.');
+    }
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case "PENDING": return "bg-yellow-100 text-yellow-800";
@@ -345,6 +372,13 @@ export default function ApplicationsPage() {
                           </button>
                         </div>
                       )}
+                      
+                      <button
+                        onClick={() => startConversation(application.user.id, application.user.name)}
+                        className="text-xs bg-purple-600 text-white px-3 py-1 rounded hover:bg-purple-700 transition"
+                      >
+                        💬 Message
+                      </button>
                     </div>
                   </div>
                 </div>

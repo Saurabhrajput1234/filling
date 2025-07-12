@@ -27,7 +27,10 @@ export async function GET(req: NextRequest) {
             }
           },
           user: {
-            include: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
               resumes: {
                 orderBy: {
                   createdAt: 'desc'
@@ -64,15 +67,19 @@ export async function GET(req: NextRequest) {
           },
           user: {
             select: {
+              id: true,
               name: true,
-              email: true
-            },
-            include: {
+              email: true,
               resumes: {
                 orderBy: {
                   createdAt: 'desc'
                 },
-                take: 1
+                take: 1,
+                select: {
+                  id: true,
+                  url: true,
+                  createdAt: true
+                }
               }
             }
           }

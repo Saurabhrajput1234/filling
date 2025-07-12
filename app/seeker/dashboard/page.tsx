@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import type { RootState } from "../../../store/store";
+import NotificationBell from "../../components/NotificationBell";
 
 interface Application {
   id: string;
@@ -169,6 +170,60 @@ export default function SeekerDashboard() {
     router.push('/seeker/profile/edit');
   };
 
+  const startConversation = async (companyName: string) => {
+    try {
+      console.log('Starting conversation with company:', companyName);
+      
+      // For seekers, we need to find the company by name first
+      const response = await fetch(`/api/companies?name=${encodeURIComponent(companyName)}`);
+      console.log('Companies API response status:', response.status);
+      
+      if (response.ok) {
+        const companies = await response.json();
+        console.log('Found companies:', companies);
+        
+        if (companies.length > 0) {
+          const company = companies[0];
+          console.log('Selected company:', company);
+          
+          // Create or get existing conversation
+          const conversationResponse = await fetch("/api/conversations", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              userId: user?.id,
+              companyId: company.id,
+            }),
+          });
+
+          console.log('Conversation API response status:', conversationResponse.status);
+          
+          if (conversationResponse.ok) {
+            const conversation = await conversationResponse.json();
+            console.log('Created/found conversation:', conversation);
+            // Navigate to conversations page with the conversation ID
+            router.push(`/seeker/conversations?conversationId=${conversation.id}`);
+          } else {
+            const errorData = await conversationResponse.json();
+            console.error('Conversation creation failed:', errorData);
+            alert('Failed to create conversation. Please try again.');
+          }
+        } else {
+          console.log('No company found with name:', companyName);
+          alert('Company not found. Please try again.');
+        }
+      } else {
+        console.error('Companies API failed:', response.status);
+        alert('Failed to find company. Please try again.');
+      }
+    } catch (error) {
+      console.error("Failed to start conversation:", error);
+      alert('Failed to start conversation. Please try again.');
+    }
+  };
+
   if (!hydrated) return null;
   if (!isAuthenticated) {
     router.push("/auth/login");
@@ -186,6 +241,7 @@ export default function SeekerDashboard() {
               <p className="text-gray-600">Welcome back, {user?.name}!</p>
             </div>
             <div className="flex items-center space-x-4">
+              <NotificationBell />
               <button
                 onClick={() => {
                   localStorage.removeItem("token");
@@ -241,7 +297,7 @@ export default function SeekerDashboard() {
           </a>
 
           <Link
-            href="/conversations"
+            href="/seeker/conversations"
             className="bg-white p-6 rounded-lg shadow-sm border hover:shadow-md transition-shadow"
           >
             <div className="flex items-center">
@@ -283,9 +339,20 @@ export default function SeekerDashboard() {
                         Applied on {new Date(application.createdAt).toLocaleDateString()}
                       </p>
                     </div>
-                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(application.status)}`}>
-                      {application.status}
-                    </span>
+                    <div className="flex items-center space-x-3">
+                      <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(application.status)}`}>
+                        {application.status}
+                      </span>
+                      <button
+                        onClick={() => startConversation(application.job.company.name)}
+                        className="text-xs bg-purple-600 text-white px-3 py-2 rounded hover:bg-purple-700 transition-colors duration-200 flex items-center gap-1"
+                      >
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                        </svg>
+                        Message
+                      </button>
+                    </div>
                   </div>
                   {application.message && (
                     <p className="mt-2 text-gray-600 text-sm">{application.message}</p>
