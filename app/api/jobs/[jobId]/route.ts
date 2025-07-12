@@ -3,10 +3,10 @@ import { prisma } from '@/lib/prisma';
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { jobId: string } }
+  { params }: { params: Promise<{ jobId: string }> }
 ) {
   try {
-    const { jobId } = params;
+    const { jobId } = await params;
     
     console.log('GET /api/jobs/[jobId] - Fetching job:', jobId);
     
@@ -46,10 +46,10 @@ export async function GET(
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { jobId: string } }
+  { params }: { params: Promise<{ jobId: string }> }
 ) {
   try {
-    const { jobId } = params;
+    const { jobId } = await params;
     const data = await req.json();
     
     console.log('PUT /api/jobs/[jobId] - Updating job:', jobId);
@@ -79,10 +79,10 @@ export async function PUT(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { jobId: string } }
+  { params }: { params: Promise<{ jobId: string }> }
 ) {
   try {
-    const { jobId } = params;
+    const { jobId } = await params;
     
     console.log('DELETE /api/jobs/[jobId] - Deleting job:', jobId);
     
