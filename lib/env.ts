@@ -1,7 +1,7 @@
 // Environment variable validation utility
 export function validateEnv() {
   const requiredEnvVars = {
-    DATABASE_URL: process.env.DATABASE_URL,
+    DATABASE_URL: process.env.DATABASE_URL_PRISMA_DATABASE_URL,
     JWT_SECRET: process.env.JWT_SECRET,
     CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
     CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
@@ -21,7 +21,7 @@ export function validateEnv() {
 
 // Environment configuration object
 export const env = {
-  DATABASE_URL: process.env.DATABASE_URL!,
+  DATABASE_URL: process.env.DATABASE_URL_PRISMA_DATABASE_URL!,
   JWT_SECRET: process.env.JWT_SECRET!,
   CLOUDINARY: {
     CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME!,
