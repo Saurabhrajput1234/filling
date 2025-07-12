@@ -4,8 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://postgres:Garima%401234@localhost:5432/jobportal"
-  
+  url      = env("DATABASE_URL")
 }
 
 model User {

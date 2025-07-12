@@ -2,9 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
+import { env } from '@/lib/env';
 import 'dotenv/config';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'changeme';
 
 export async function POST(req: NextRequest) {
   try {
@@ -63,7 +62,7 @@ export async function POST(req: NextRequest) {
           email: user.email, 
           role: user.role,
           companyId: user.companyId 
-        }, JWT_SECRET, { expiresIn: '7d' });
+        }, env.JWT_SECRET, { expiresIn: '7d' });
         
         return NextResponse.json({ 
           message: 'User registered', 
@@ -109,7 +108,7 @@ export async function POST(req: NextRequest) {
           email: user.email, 
           role: user.role,
           companyId: user.companyId 
-        }, JWT_SECRET, { expiresIn: '7d' });
+        }, env.JWT_SECRET, { expiresIn: '7d' });
         
         return NextResponse.json({ 
           message: 'Login successful', 

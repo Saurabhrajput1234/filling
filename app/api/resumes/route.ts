@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { v2 as cloudinary } from 'cloudinary';
+import { env } from '@/lib/env';
 import 'dotenv/config';
 
 cloudinary.config({
-  cloud_name: 'dscg8f8bg',
-  api_key: '489153691184969',
-  api_secret:'_QjYfhYCQpbDnuz3o25f4q-dzbM'
-
+  cloud_name: env.CLOUDINARY.CLOUD_NAME,
+  api_key: env.CLOUDINARY.API_KEY,
+  api_secret: env.CLOUDINARY.API_SECRET
 });
 
 

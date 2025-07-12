@@ -1,36 +1,112 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Job Portal - Full Stack Application
+
+A comprehensive job portal built with Next.js, Prisma, PostgreSQL, and Socket.IO for real-time messaging.
+
+## Features
+
+- 🔐 User authentication (Job Seekers & Companies)
+- 💼 Job posting and application management
+- 📄 Resume upload with Cloudinary integration
+- 💬 Real-time messaging between companies and applicants
+- 🔔 Notification system
+- 📱 Responsive design with Tailwind CSS
+
+## Prerequisites
+
+- Node.js 18+ 
+- PostgreSQL database
+- Cloudinary account (for file uploads)
+
+## Environment Setup
+
+1. Copy the environment template:
+```bash
+cp env-template.txt .env.local
+```
+
+2. Update `.env.local` with your actual credentials:
+```env
+# Database Configuration
+DATABASE_URL="postgresql://username:password@localhost:5432/jobportal"
+
+# JWT Configuration  
+JWT_SECRET="your-super-secret-jwt-key-change-this-in-production"
+
+# Cloudinary Configuration
+CLOUDINARY_CLOUD_NAME="your-cloudinary-cloud-name"
+CLOUDINARY_API_KEY="your-cloudinary-api-key"
+CLOUDINARY_API_SECRET="your-cloudinary-api-secret"
+
+# Application Configuration
+NODE_ENV="development"
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+SOCKET_SERVER_PORT="3002"
+```
 
 ## Getting Started
 
-First, run the development server:
-
+1. Install dependencies:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Set up the database:
+```bash
+npx prisma generate
+npx prisma db push
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Run the development server:
+```bash
+# For development with Socket.IO
+npm run dev:both
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Or run separately:
+npm run dev          # Next.js app
+npm run dev:socket   # Socket.IO server
+```
 
-## Learn More
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-To learn more about Next.js, take a look at the following resources:
+## Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+job-portal/
+├── app/                    # Next.js App Router
+│   ├── api/               # API routes
+│   ├── auth/              # Authentication pages
+│   ├── company/           # Company dashboard
+│   ├── seeker/            # Job seeker dashboard
+│   └── jobs/              # Job-related pages
+├── lib/                   # Utilities and configurations
+├── prisma/                # Database schema and migrations
+├── store/                 # Redux store and slices
+└── public/                # Static assets
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## API Endpoints
 
-## Deploy on Vercel
+- `POST /api/auth` - User registration and login
+- `GET/POST /api/jobs` - Job management
+- `GET/POST /api/applications` - Job applications
+- `GET/POST /api/resumes` - Resume upload
+- `GET/POST /api/conversations` - Messaging
+- `GET/POST /api/notifications` - Notifications
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Security Features
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Environment variable validation
+- JWT-based authentication
+- Password hashing with bcrypt
+- Input validation and sanitization
+- Secure file upload handling
+
+## Deployment
+
+The application is ready for deployment on platforms like Vercel, Netlify, or any Node.js hosting service.
+
+Remember to:
+- Set up environment variables in your hosting platform
+- Configure your PostgreSQL database
+- Set up Cloudinary credentials
+- Update the Socket.IO server configuration for production
