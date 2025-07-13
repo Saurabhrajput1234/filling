@@ -153,6 +153,10 @@ export default function CompanyDashboard() {
     });
   }
 
+  const handleEditProfile = () => {
+    router.push("/company/profile/edit");
+  };
+
   if (!isAuthenticated) {
     router.push("/auth/login");
     return null;
@@ -380,9 +384,11 @@ export default function CompanyDashboard() {
                               <p className="font-semibold text-gray-900 dark:text-white text-sm sm:text-base">{application.user?.name || 'Unknown User'}</p>
                               <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">{application.user?.email || 'No email'}</p>
                               {application.message && (
-                                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1 bg-gray-50 dark:bg-gray-700 p-2 rounded line-clamp-2">
-                                  "{application.message}"
-                                </p>
+                                <div className="mt-1">
+                                  <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 p-2 rounded">
+                                    <p className="whitespace-pre-wrap">"{application.message}"</p>
+                                  </div>
+                                </div>
                               )}
                             </div>
                             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:ml-4 sm:flex-shrink-0">
@@ -457,9 +463,64 @@ export default function CompanyDashboard() {
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Company ID</label>
                 <p className="text-gray-900 dark:text-white font-semibold text-sm sm:text-base">{user?.companyId}</p>
               </div>
+              {user?.website && (
+                <div className="bg-gray-50 dark:bg-gray-700 p-3 sm:p-4 rounded-lg">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Website</label>
+                  <a 
+                    href={user.website} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-semibold text-sm sm:text-base break-all"
+                  >
+                    {user.website}
+                  </a>
+                </div>
+              )}
+              {user?.industry && (
+                <div className="bg-gray-50 dark:bg-gray-700 p-3 sm:p-4 rounded-lg">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Industry</label>
+                  <p className="text-gray-900 dark:text-white font-semibold text-sm sm:text-base">{user.industry}</p>
+                </div>
+              )}
+              {user?.size && (
+                <div className="bg-gray-50 dark:bg-gray-700 p-3 sm:p-4 rounded-lg">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Company Size</label>
+                  <p className="text-gray-900 dark:text-white font-semibold text-sm sm:text-base">{user.size}</p>
+                </div>
+              )}
+              {user?.location && (
+                <div className="bg-gray-50 dark:bg-gray-700 p-3 sm:p-4 rounded-lg">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Location</label>
+                  <p className="text-gray-900 dark:text-white font-semibold text-sm sm:text-base">{user.location}</p>
+                </div>
+              )}
             </div>
+            
+            {/* Company Description */}
+            {user?.description && (
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Company Description</label>
+                <div className="bg-gray-50 dark:bg-gray-700 p-3 sm:p-4 rounded-lg">
+                  <p className="text-gray-900 dark:text-white text-sm sm:text-base whitespace-pre-wrap">{user.description}</p>
+                </div>
+              </div>
+            )}
+            
+            {/* Company Profile */}
+            {user?.profile && (
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Company Profile</label>
+                <div className="bg-gray-50 dark:bg-gray-700 p-3 sm:p-4 rounded-lg">
+                  <p className="text-gray-900 dark:text-white text-sm sm:text-base whitespace-pre-wrap">{user.profile}</p>
+                </div>
+              </div>
+            )}
+            
             <div className="flex flex-col sm:flex-row gap-3">
-              <button className="bg-blue-600 text-white px-4 sm:px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center justify-center gap-2 text-sm sm:text-base btn-touch">
+              <button 
+                onClick={handleEditProfile}
+                className="bg-blue-600 text-white px-4 sm:px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center justify-center gap-2 text-sm sm:text-base btn-touch"
+              >
                 <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                 </svg>

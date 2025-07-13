@@ -43,7 +43,7 @@ export default function RootLayout({
           <AuthRehydrator />
           <ThemeProvider>
             <SocketProvider>
-              {children}
+          {children}
             </SocketProvider>
           </ThemeProvider>
         </ReduxProvider>

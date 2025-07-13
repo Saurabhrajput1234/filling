@@ -29,7 +29,7 @@ export default function Home() {
               <Link href="/auth/login" className="bg-blue-600 text-white px-4 lg:px-5 py-2 rounded-lg text-sm lg:text-base font-semibold shadow hover:bg-blue-700 transition btn-touch">Login</Link>
               <Link href="/auth/register" className="bg-green-600 text-white px-4 lg:px-5 py-2 rounded-lg text-sm lg:text-base font-semibold shadow hover:bg-green-700 transition btn-touch">Sign Up</Link>
             </div>
-            
+
             {/* Mobile menu button */}
             <div className="md:hidden flex items-center space-x-2">
               <ThemeToggle />
@@ -44,7 +44,7 @@ export default function Home() {
               </button>
             </div>
           </div>
-          
+
           {/* Mobile Navigation */}
           {isMenuOpen && (
             <div className="md:hidden animate-fade-in-down">
@@ -274,8 +274,8 @@ export default function Home() {
                 </div>
               </div>
               <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">
-                "Filling helped me find my dream job in just 2 weeks! The matching algorithm is incredible."
-              </p>
+                 "Filling helped me find my dream job in just 2 weeks! The matching algorithm is incredible."
+               </p>
             </div>
 
             <div className="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
@@ -316,24 +316,24 @@ export default function Home() {
         <div className="container-responsive">
           <div className="text-center">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4">
-              Ready to Get Started?
-            </h2>
+            Ready to Get Started?
+          </h2>
             <p className="text-lg sm:text-xl text-blue-100 mb-8 max-w-2xl mx-auto px-4">
               Join thousands of professionals who have found their dream jobs through Filling
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+           </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link 
                 href="/auth/register" 
                 className="bg-white text-blue-600 px-8 py-4 rounded-xl text-lg font-bold shadow-lg hover:bg-gray-100 transition-all duration-300 btn-touch"
               >
                 Get Started Today
-              </Link>
+            </Link>
               <Link 
                 href="/jobs" 
                 className="bg-transparent text-white border-2 border-white px-8 py-4 rounded-xl text-lg font-bold hover:bg-white hover:text-blue-600 transition-all duration-300 btn-touch"
               >
-                Browse Jobs
-              </Link>
+              Browse Jobs
+            </Link>
             </div>
           </div>
         </div>
@@ -344,7 +344,7 @@ export default function Home() {
         <div className="container-responsive">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="md:col-span-2">
-              <h3 className="text-2xl font-bold text-blue-400 mb-4">Filling</h3>
+                             <h3 className="text-2xl font-bold text-blue-400 mb-4">Filling</h3>
               <p className="text-gray-300 text-sm sm:text-base mb-6 max-w-md">
                 Connecting talented professionals with amazing opportunities. Your career journey starts here.
               </p>

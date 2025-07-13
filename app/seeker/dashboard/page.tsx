@@ -128,7 +128,7 @@ export default function SeekerDashboard() {
 
   useEffect(() => {
     if (hydrated && isAuthenticated) {
-      fetchApplications();
+    fetchApplications();
     }
   }, [hydrated, isAuthenticated]);
 
@@ -453,16 +453,18 @@ export default function SeekerDashboard() {
                         Applied on {formatDate(application.createdAt)}
                       </p>
                       {application.message && (
-                        <p className="mt-2 text-gray-600 dark:text-gray-300 text-xs sm:text-sm bg-gray-50 dark:bg-gray-700 p-2 sm:p-3 rounded-lg line-clamp-3">
-                          "{application.message}"
-                        </p>
+                        <div className="mt-2">
+                          <div className="text-gray-600 dark:text-gray-300 text-xs sm:text-sm bg-gray-50 dark:bg-gray-700 p-2 sm:p-3 rounded-lg">
+                            <p className="whitespace-pre-wrap">"{application.message}"</p>
+                          </div>
+                        </div>
                       )}
                     </div>
                     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 lg:ml-4 lg:flex-shrink-0">
                       <span className={`inline-flex items-center px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-medium border ${getStatusColor(application.status)}`}>
                         {getStatusIcon(application.status)}
                         <span className="ml-1">{application.status}</span>
-                      </span>
+                    </span>
                       <button
                         onClick={() => startConversation(application.job.company.name)}
                         className="bg-purple-600 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors duration-200 flex items-center justify-center gap-2 text-xs sm:text-sm font-medium btn-touch w-full sm:w-auto"
@@ -616,7 +618,7 @@ export default function SeekerDashboard() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                     </svg>
                     <span className="text-xs sm:text-sm">Edit Profile</span>
-                  </button>
+              </button>
                 </div>
               </form>
 

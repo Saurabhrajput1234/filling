@@ -6,6 +6,12 @@ interface User {
   email: string;
   role: 'SEEKER' | 'COMPANY' | 'ADMIN';
   companyId?: string;
+  profile?: string;
+  website?: string;
+  industry?: string;
+  size?: string;
+  location?: string;
+  description?: string;
 }
 
 interface AuthState {
@@ -39,8 +45,13 @@ const authSlice = createSlice({
       state.token = null;
       state.isAuthenticated = false;
     },
+    updateProfile(state, action: PayloadAction<Partial<User>>) {
+      if (state.user) {
+        state.user = { ...state.user, ...action.payload };
+      }
+    },
   },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout, updateProfile } = authSlice.actions;
 export default authSlice.reducer; 

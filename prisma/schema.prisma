@@ -14,6 +14,12 @@ model User {
   password      String
   role          Role
   companyId     String?
+  profile       String?
+  website       String?
+  industry      String?
+  size          String?
+  location      String?
+  description   String?
   createdAt     DateTime       @default(now())
   applications  Application[]
   conversations Conversation[] @relation("UserConversations")
