@@ -27,9 +27,10 @@ function verifyToken(req: NextRequest) {
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params;
     const user = await prisma.user.findUnique({
       where: { id: params.id },
       include: {
@@ -53,9 +54,10 @@ export async function GET(
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params;
     console.log("PUT /api/users/[id] called with params:", params);
     
     // Verify authentication
@@ -125,9 +127,10 @@ export async function PUT(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params;
     // Verify authentication
     const decoded = verifyToken(req);
     if (!decoded) {
