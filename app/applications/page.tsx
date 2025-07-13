@@ -90,10 +90,17 @@ export default function ApplicationsPage() {
       console.log('Updating application status:', applicationId, 'to', status);
       setUpdatingStatus(applicationId);
       
+      // Get token from cookies
+      const token = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('token='))
+        ?.split('=')[1];
+      
       const response = await fetch("/api/applications", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          ...(token && { Authorization: `Bearer ${token}` }),
         },
         body: JSON.stringify({
           id: applicationId,

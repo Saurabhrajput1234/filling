@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import type { RootState } from "../../../store/store";
 import { logout } from "../../../store/authSlice";
-import ThemeToggle from "../../components/ThemeToggle";
 
 interface Job {
   id: string;
@@ -89,13 +88,16 @@ export default function CompanyDashboard() {
     try {
       const token = getToken();
       
-      const response = await fetch(`/api/applications/${applicationId}`, {
+      const response = await fetch(`/api/applications`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           ...(token && { Authorization: `Bearer ${token}` }),
         },
-        body: JSON.stringify({ status }),
+        body: JSON.stringify({ 
+          id: applicationId,
+          status 
+        }),
       });
 
       if (response.ok) {
@@ -109,7 +111,9 @@ export default function CompanyDashboard() {
           }))
         );
       } else {
-        alert("Failed to update application status");
+        const errorData = await response.json();
+        console.error("Failed to update application status:", errorData);
+        alert(`Failed to update status: ${errorData.error || 'Unknown error'}`);
       }
     } catch (error) {
       console.error("Error updating application status:", error);
@@ -224,7 +228,6 @@ export default function CompanyDashboard() {
               </p>
             </div>
             <div className="flex items-center justify-center sm:justify-end space-x-2 sm:space-x-4">
-              <ThemeToggle />
               <button
                 onClick={() => {
                   dispatch(logout());

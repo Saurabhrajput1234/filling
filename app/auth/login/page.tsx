@@ -6,7 +6,6 @@ import { useDispatch } from "react-redux";
 import { login } from "../../../store/authSlice";
 import type { AppDispatch } from "../../../store/store";
 import Link from "next/link";
-import ThemeToggle from "../../components/ThemeToggle";
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
@@ -85,7 +84,6 @@ export default function LoginPage() {
             <Link href="/" className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400">
               Filling
             </Link>
-            <ThemeToggle />
           </div>
         </div>
       </div>
@@ -190,12 +188,14 @@ export default function LoginPage() {
               </div>
             </div>
             
-            <p className="mt-6 sm:mt-8 text-center text-gray-600 dark:text-gray-300 text-xs sm:text-sm">
-              Don't have an account?{' '}
-              <Link href="/auth/register" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium transition-colors">
-                Sign up
+            <div className="flex items-center justify-center space-x-4">
+              <Link
+                href="/auth/register"
+                className="text-blue-600 hover:text-blue-700 transition-colors"
+              >
+                Don't have an account? Register
               </Link>
-            </p>
+            </div>
           </div>
         </div>
       </div>

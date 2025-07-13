@@ -1,5 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import jwt from 'jsonwebtoken';
+
+interface JWTPayload {
+  id: string;
+  email: string;
+  role: string;
+  companyId?: string;
+}
 
 export async function GET(req: NextRequest) {
   try {
@@ -251,12 +259,55 @@ export async function POST(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   try {
+    // Get token from Authorization header
+    const authHeader = req.headers.get('authorization');
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return NextResponse.json({ error: 'Unauthorized - No token provided' }, { status: 401 });
+    }
+
+    const token = authHeader.substring(7);
+    
+    // Verify token and get user
+    let decoded: JWTPayload;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET!) as JWTPayload;
+    } catch (error) {
+      return NextResponse.json({ error: 'Unauthorized - Invalid token' }, { status: 401 });
+    }
+
+    // Check if user is a company
+    if (decoded.role !== 'COMPANY') {
+      return NextResponse.json({ error: 'Forbidden - Only companies can update applications' }, { status: 403 });
+    }
+
     const data = await req.json();
     const { id, ...updateData } = data;
     
-    console.log('PUT /api/applications - Updating application:', id);
+    console.log('PUT /api/applications - Updating application:', id, 'by company:', decoded.companyId);
     
-    const application = await prisma.application.update({
+    // Verify the application belongs to the company's job
+    const application = await prisma.application.findUnique({
+      where: { id },
+      include: {
+        job: {
+          select: {
+            companyId: true
+          }
+        }
+      }
+    });
+
+    if (!application) {
+      return NextResponse.json({ error: 'Application not found' }, { status: 404 });
+    }
+
+    // Check if the job belongs to the company
+    if (application.job.companyId !== decoded.companyId) {
+      return NextResponse.json({ error: 'Forbidden - You can only update applications for your own jobs' }, { status: 403 });
+    }
+
+    // Update the application
+    const updatedApplication = await prisma.application.update({
       where: { id },
       data: updateData,
       include: {
@@ -279,7 +330,7 @@ export async function PUT(req: NextRequest) {
     });
     
     console.log('PUT /api/applications - Application updated successfully');
-    return NextResponse.json(application);
+    return NextResponse.json(updatedApplication);
   } catch (error: any) {
     console.error('PUT /api/applications error:', error);
     return NextResponse.json({ error: 'Failed to update application' }, { status: 500 });

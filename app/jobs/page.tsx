@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { setJobs } from "../../store/jobsSlice";
 import type { RootState, AppDispatch } from "../../store/store";
-import ThemeToggle from "../components/ThemeToggle";
 
 interface Job {
   id: string;
@@ -112,15 +111,14 @@ export default function JobsPage() {
               <h1 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">Job Feed</h1>
             </div>
             <div className="flex items-center space-x-4">
-              <ThemeToggle />
               {!isAuthenticated ? (
-                <Link href="/auth/login" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm sm:text-base">
+                <Link href="/auth/login" className="text-gray-600 hover:text-blue-600 transition-colors">
                   Login
                 </Link>
               ) : (
                 <Link
                   href={user?.role === "COMPANY" ? "/company/dashboard" : "/seeker/dashboard"}
-                  className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm sm:text-base"
+                  className="text-gray-600 hover:text-blue-600 transition-colors"
                 >
                   Profile
                 </Link>

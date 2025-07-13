@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import type { RootState } from "../../../store/store";
-import ThemeToggle from "../../components/ThemeToggle";
+
 
 interface Job {
   id: string;
@@ -220,19 +220,12 @@ export default function JobDetailsPage({ params }: { params: Promise<{ jobId: st
               </Link>
             </div>
             <div className="flex items-center space-x-4">
-              <ThemeToggle />
-              {!isAuthenticated ? (
-                <Link href="/auth/login" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                  Login
-                </Link>
-              ) : (
-                <Link
-                  href={user?.role === "COMPANY" ? "/company/dashboard" : "/seeker/dashboard"}
-                  className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                >
-                  Profile
-                </Link>
-              )}
+              <Link
+                href="/jobs"
+                className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors"
+              >
+                Back to Jobs
+              </Link>
             </div>
           </div>
         </div>

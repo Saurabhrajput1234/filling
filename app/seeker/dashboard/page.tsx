@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import type { RootState } from "../../../store/store";
 import { logout } from "../../../store/authSlice";
-import ThemeToggle from "../../components/ThemeToggle";
+
 import NotificationBell from "../../components/NotificationBell";
 
 interface Application {
@@ -283,7 +283,6 @@ export default function SeekerDashboard() {
               <p className="text-gray-600 dark:text-gray-300 mt-1 text-sm sm:text-base">Welcome back, {user?.name}! 👋</p>
             </div>
             <div className="flex items-center justify-center sm:justify-end space-x-2 sm:space-x-4">
-              <ThemeToggle />
               <NotificationBell />
               <button
                 onClick={() => {

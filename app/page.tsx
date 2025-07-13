@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import ThemeToggle from "./components/ThemeToggle";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
 
@@ -12,23 +11,22 @@ export default function Home() {
   const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-white dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-white">
       {/* Navigation */}
-      <nav className="bg-white/80 dark:bg-gray-900/80 backdrop-blur shadow-lg border-b border-gray-200 dark:border-gray-700 sticky top-0 z-30 transition-all">
+      <nav className="bg-white/80 backdrop-blur shadow-lg border-b border-gray-200 sticky top-0 z-30 transition-all">
         <div className="container-responsive">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <h1 className="text-2xl sm:text-3xl font-extrabold text-blue-700 dark:text-blue-400 tracking-tight drop-shadow-sm">Filling</h1>
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-blue-700 tracking-tight drop-shadow-sm">Filling</h1>
               </div>
             </div>
             
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-4 lg:space-x-6">
-              <a href="#features" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 rounded-md text-sm lg:text-base font-medium transition-colors">Features</a>
-              <a href="#how-it-works" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 rounded-md text-sm lg:text-base font-medium transition-colors">How it Works</a>
-              <a href="#testimonials" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 rounded-md text-sm lg:text-base font-medium transition-colors">Testimonials</a>
-              <ThemeToggle />
+              <a href="#features" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm lg:text-base font-medium transition-colors">Features</a>
+              <a href="#how-it-works" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm lg:text-base font-medium transition-colors">How it Works</a>
+              <a href="#testimonials" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm lg:text-base font-medium transition-colors">Testimonials</a>
               {!isAuthenticated ? (
                 <>
                   <Link href="/auth/login" className="bg-blue-600 text-white px-4 lg:px-5 py-2 rounded-lg text-sm lg:text-base font-semibold shadow hover:bg-blue-700 transition btn-touch">Login</Link>
@@ -46,10 +44,9 @@ export default function Home() {
 
             {/* Mobile menu button */}
             <div className="md:hidden flex items-center space-x-2">
-              <ThemeToggle />
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 focus:outline-none focus:text-blue-600 btn-touch"
+                className="text-gray-700 hover:text-blue-600 focus:outline-none focus:text-blue-600 btn-touch"
                 aria-label="Open menu"
               >
                 <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -62,25 +59,25 @@ export default function Home() {
           {/* Mobile Navigation */}
           {isMenuOpen && (
             <div className="md:hidden animate-fade-in-down">
-              <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-gray-200 dark:border-gray-700 mt-4">
+              <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-gray-200 mt-4">
                 <a 
                   href="#features" 
                   onClick={() => setIsMenuOpen(false)}
-                  className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 block px-3 py-3 rounded-md text-base font-medium transition-colors"
+                  className="text-gray-700 hover:text-blue-600 block px-3 py-3 rounded-md text-base font-medium transition-colors"
                 >
                   Features
                 </a>
                 <a 
                   href="#how-it-works" 
                   onClick={() => setIsMenuOpen(false)}
-                  className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 block px-3 py-3 rounded-md text-base font-medium transition-colors"
+                  className="text-gray-700 hover:text-blue-600 block px-3 py-3 rounded-md text-base font-medium transition-colors"
                 >
                   How it Works
                 </a>
                 <a 
                   href="#testimonials" 
                   onClick={() => setIsMenuOpen(false)}
-                  className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 block px-3 py-3 rounded-md text-base font-medium transition-colors"
+                  className="text-gray-700 hover:text-blue-600 block px-3 py-3 rounded-md text-base font-medium transition-colors"
                 >
                   Testimonials
                 </a>
@@ -119,10 +116,10 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-blue-100 via-indigo-100 to-white dark:from-gray-800 dark:via-gray-700 dark:to-gray-900 py-16 sm:py-20 lg:py-28 overflow-hidden transition-colors duration-300">
+      <section className="relative bg-gradient-to-br from-blue-100 via-indigo-100 to-white py-16 sm:py-20 lg:py-28 overflow-hidden transition-colors duration-300">
         <div className="absolute inset-0 pointer-events-none select-none">
           <svg 
-            className="absolute bottom-0 left-0 w-full h-32 sm:h-40 opacity-100 dark:opacity-100" 
+            className="absolute bottom-0 left-0 w-full h-32 sm:h-40 opacity-100" 
             viewBox="0 0 1440 320" 
             fill="none" 
             xmlns="http://www.w3.org/2000/svg"
@@ -137,11 +134,11 @@ export default function Home() {
         </div>
         <div className="container-responsive relative z-10">
           <div className="text-center">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 dark:text-white mb-6 sm:mb-8 leading-tight drop-shadow-sm animate-fade-in-up">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 mb-6 sm:mb-8 leading-tight drop-shadow-sm animate-fade-in-up">
               Find Your Dream Job with
-              <span className="text-blue-600 dark:text-blue-400"> Filling</span>
+              <span className="text-blue-600"> Filling</span>
             </h1>
-            <p className="text-lg sm:text-xl lg:text-2xl text-gray-700 dark:text-gray-300 mb-8 sm:mb-10 max-w-3xl mx-auto animate-fade-in-up delay-100 px-4">
+            <p className="text-lg sm:text-xl lg:text-2xl text-gray-700 mb-8 sm:mb-10 max-w-3xl mx-auto animate-fade-in-up delay-100 px-4">
               Connect talented professionals with amazing opportunities. Whether you're looking for your next career move or seeking the perfect team member, we've got you covered.
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center animate-fade-in-up delay-200 px-4">
@@ -163,74 +160,74 @@ export default function Home() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-12 sm:py-16 bg-white dark:bg-gray-800 transition-colors duration-300">
+      <section className="py-12 sm:py-16 bg-white transition-colors duration-300">
         <div className="container-responsive">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 text-center">
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 p-4 sm:p-6 rounded-xl shadow-lg">
-              <div className="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">10,000+</div>
-              <div className="text-sm sm:text-base text-gray-600 dark:text-gray-300">Active Jobs</div>
+            <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 sm:p-6 rounded-xl shadow-lg">
+              <div className="text-2xl sm:text-3xl font-bold text-blue-600 mb-2">10,000+</div>
+              <div className="text-sm sm:text-base text-gray-600">Active Jobs</div>
             </div>
-            <div className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 p-4 sm:p-6 rounded-xl shadow-lg">
-              <div className="text-2xl sm:text-3xl font-bold text-green-600 dark:text-green-400 mb-2">50,000+</div>
-              <div className="text-sm sm:text-base text-gray-600 dark:text-gray-300">Job Seekers</div>
+            <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 sm:p-6 rounded-xl shadow-lg">
+              <div className="text-2xl sm:text-3xl font-bold text-green-600 mb-2">50,000+</div>
+              <div className="text-sm sm:text-base text-gray-600">Job Seekers</div>
             </div>
-            <div className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 p-4 sm:p-6 rounded-xl shadow-lg">
-              <div className="text-2xl sm:text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2">5,000+</div>
-              <div className="text-sm sm:text-base text-gray-600 dark:text-gray-300">Companies</div>
+            <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-4 sm:p-6 rounded-xl shadow-lg">
+              <div className="text-2xl sm:text-3xl font-bold text-purple-600 mb-2">5,000+</div>
+              <div className="text-sm sm:text-base text-gray-600">Companies</div>
             </div>
-            <div className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 p-4 sm:p-6 rounded-xl shadow-lg">
-              <div className="text-2xl sm:text-3xl font-bold text-orange-600 dark:text-orange-400 mb-2">95%</div>
-              <div className="text-sm sm:text-base text-gray-600 dark:text-gray-300">Success Rate</div>
+            <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-4 sm:p-6 rounded-xl shadow-lg">
+              <div className="text-2xl sm:text-3xl font-bold text-orange-600 mb-2">95%</div>
+              <div className="text-sm sm:text-base text-gray-600">Success Rate</div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-16 sm:py-20 bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+      <section id="features" className="py-16 sm:py-20 bg-gray-50 transition-colors duration-300">
         <div className="container-responsive">
           <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               Why Choose Filling?
             </h2>
-            <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto px-4">
+            <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto px-4">
               We provide the tools and platform you need to succeed in your career journey.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            <div className="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-6">
-                <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="bg-white p-6 sm:p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-6">
+                <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6" />
                 </svg>
               </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-4">Smart Job Matching</h3>
-              <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Smart Job Matching</h3>
+              <p className="text-gray-600 text-sm sm:text-base">
                 Our AI-powered algorithm matches you with the perfect job opportunities based on your skills, experience, and preferences.
               </p>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-              <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mb-6">
-                <svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="bg-white p-6 sm:p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-6">
+                <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-4">Easy Application Process</h3>
-              <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Easy Application Process</h3>
+              <p className="text-gray-600 text-sm sm:text-base">
                 Apply to multiple jobs with just a few clicks. Save your resume and cover letter templates for quick applications.
               </p>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 md:col-span-2 lg:col-span-1">
-              <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mb-6">
-                <svg className="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="bg-white p-6 sm:p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 md:col-span-2 lg:col-span-1">
+              <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-6">
+                <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                 </svg>
               </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-4">Direct Communication</h3>
-              <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">Direct Communication</h3>
+              <p className="text-gray-600 text-sm sm:text-base">
                 Chat directly with employers and candidates. No more waiting for email responses - get instant feedback.
               </p>
             </div>
@@ -239,107 +236,107 @@ export default function Home() {
       </section>
 
       {/* How It Works Section */}
-      <section id="how-it-works" className="py-16 sm:py-20 bg-white dark:bg-gray-800 transition-colors duration-300">
+      <section id="how-it-works" className="py-16 sm:py-20 bg-white transition-colors duration-300">
         <div className="container-responsive">
           <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               How It Works
             </h2>
-            <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto px-4">
+            <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto px-4">
               Get started in just a few simple steps
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             <div className="text-center group">
-              <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">1</span>
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                <span className="text-2xl font-bold text-blue-600">1</span>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Create Account</h3>
-              <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">Sign up as a job seeker or employer in minutes</p>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Create Account</h3>
+              <p className="text-gray-600 text-sm sm:text-base">Sign up as a job seeker or employer in minutes</p>
             </div>
 
             <div className="text-center group">
-              <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                <span className="text-2xl font-bold text-green-600 dark:text-green-400">2</span>
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                <span className="text-2xl font-bold text-green-600">2</span>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Complete Profile</h3>
-              <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">Add your skills, experience, and preferences</p>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Complete Profile</h3>
+              <p className="text-gray-600 text-sm sm:text-base">Add your skills, experience, and preferences</p>
             </div>
 
             <div className="text-center group">
-              <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                <span className="text-2xl font-bold text-purple-600 dark:text-purple-400">3</span>
+              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                <span className="text-2xl font-bold text-purple-600">3</span>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Find Opportunities</h3>
-              <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">Browse jobs or post openings that match your needs</p>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Find Opportunities</h3>
+              <p className="text-gray-600 text-sm sm:text-base">Browse jobs or post openings that match your needs</p>
             </div>
 
             <div className="text-center group">
-              <div className="w-16 h-16 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                <span className="text-2xl font-bold text-orange-600 dark:text-orange-400">4</span>
+              <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                <span className="text-2xl font-bold text-orange-600">4</span>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Connect & Apply</h3>
-              <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">Apply for jobs or hire the perfect candidate</p>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Connect & Apply</h3>
+              <p className="text-gray-600 text-sm sm:text-base">Apply for jobs or hire the perfect candidate</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Testimonials Section */}
-      <section id="testimonials" className="py-16 sm:py-20 bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+      <section id="testimonials" className="py-16 sm:py-20 bg-gray-50 transition-colors duration-300">
         <div className="container-responsive">
           <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               What Our Users Say
             </h2>
-            <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto px-4">
+            <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto px-4">
               Don't just take our word for it - hear from our community
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            <div className="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+            <div className="bg-white p-6 sm:p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
               <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mr-4">
-                  <span className="text-blue-600 dark:text-blue-400 font-semibold">JS</span>
+                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+                  <span className="text-blue-600 font-semibold">JS</span>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white">John Smith</h4>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm">Software Developer</p>
+                  <h4 className="font-semibold text-gray-900">John Smith</h4>
+                  <p className="text-gray-600 text-sm">Software Developer</p>
                 </div>
               </div>
-              <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">
+              <p className="text-gray-600 text-sm sm:text-base">
                  "Filling helped me find my dream job in just 2 weeks! The matching algorithm is incredible."
                </p>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+            <div className="bg-white p-6 sm:p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
               <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mr-4">
-                  <span className="text-green-600 dark:text-green-400 font-semibold">SJ</span>
+                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
+                  <span className="text-green-600 font-semibold">SJ</span>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white">Sarah Johnson</h4>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm">HR Manager</p>
+                  <h4 className="font-semibold text-gray-900">Sarah Johnson</h4>
+                  <p className="text-gray-600 text-sm">HR Manager</p>
                 </div>
               </div>
-              <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">
+              <p className="text-gray-600 text-sm sm:text-base">
                 "We've hired 15 amazing developers through Filling. The quality of candidates is outstanding."
               </p>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 md:col-span-2 lg:col-span-1">
+            <div className="bg-white p-6 sm:p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 md:col-span-2 lg:col-span-1">
               <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mr-4">
-                  <span className="text-purple-600 dark:text-purple-400 font-semibold">MJ</span>
+                <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mr-4">
+                  <span className="text-purple-600 font-semibold">MJ</span>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white">Mike Chen</h4>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm">Product Manager</p>
+                  <h4 className="font-semibold text-gray-900">Mike Chen</h4>
+                  <p className="text-gray-600 text-sm">Product Manager</p>
                 </div>
               </div>
-              <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">
+              <p className="text-gray-600 text-sm sm:text-base">
                 "The direct messaging feature saved us weeks of back-and-forth emails. Highly recommended!"
               </p>
             </div>
@@ -348,7 +345,7 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 sm:py-20 bg-blue-600 dark:bg-blue-700 transition-colors duration-300">
+      <section className="py-16 sm:py-20 bg-blue-600 transition-colors duration-300">
         <div className="container-responsive">
           <div className="text-center">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4">
@@ -376,7 +373,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 dark:bg-black text-white py-12 sm:py-16 transition-colors duration-300">
+      <footer className="bg-gray-900 text-white py-12 sm:py-16 transition-colors duration-300">
         <div className="container-responsive">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="md:col-span-2">

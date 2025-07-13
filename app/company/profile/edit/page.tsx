@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import type { RootState } from "../../../../store/store";
 import { updateProfile } from "../../../../store/authSlice";
-import ThemeToggle from "../../../components/ThemeToggle";
+
 
 interface CompanyProfile {
   name: string;
@@ -171,7 +171,6 @@ export default function CompanyProfileEdit() {
               <p className="text-gray-600 dark:text-gray-300 mt-1 text-sm sm:text-base">Update your company information</p>
             </div>
             <div className="flex items-center justify-center sm:justify-end space-x-2 sm:space-x-4">
-              <ThemeToggle />
               <Link
                 href="/company/dashboard"
                 className="bg-gray-600 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors font-medium flex items-center gap-2 text-sm sm:text-base btn-touch"

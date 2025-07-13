@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useSocket } from "../../lib/socketContext";
 import type { RootState } from "../../store/store";
-import ThemeToggle from "../components/ThemeToggle";
 
 interface Application {
   id: string;
@@ -270,16 +269,12 @@ export default function ConversationsPage() {
                 </span>
               )}
             </div>
-            <div className="flex items-center space-x-3 sm:space-x-4">
-              <ThemeToggle />
+            <div className="flex items-center space-x-4">
               <Link
                 href="/company/dashboard"
-                className="bg-gray-600 dark:bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600 transition-colors font-medium flex items-center gap-2 text-sm sm:text-base btn-touch"
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-                <span className="hidden sm:inline">Back to Dashboard</span>
+                Dashboard
               </Link>
             </div>
           </div>
