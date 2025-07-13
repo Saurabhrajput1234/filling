@@ -2,15 +2,18 @@
 
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setTheme } from '../../store/themeSlice';
+import { setTheme, setHydrated } from '../../store/themeSlice';
 import type { RootState } from '../../store/store';
 
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch();
-  const { theme } = useSelector((state: RootState) => state.theme);
+  const { theme, isHydrated } = useSelector((state: RootState) => state.theme);
 
   useEffect(() => {
-    // Initialize theme on mount
+    // Mark as hydrated first
+    dispatch(setHydrated());
+    
+    // Initialize theme on mount (client-side only)
     const savedTheme = localStorage.getItem('theme') as 'light' | 'dark';
     if (savedTheme) {
       dispatch(setTheme(savedTheme));

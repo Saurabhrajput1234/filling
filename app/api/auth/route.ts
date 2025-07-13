@@ -5,6 +5,28 @@ import * as jwt from 'jsonwebtoken';
 import { env } from '@/lib/env';
 import 'dotenv/config';
 
+export async function GET(req: NextRequest) {
+  try {
+    // Get token from cookie
+    const token = req.cookies.get('token')?.value;
+    
+    if (!token) {
+      return NextResponse.json({ error: 'No token found' }, { status: 401 });
+    }
+    
+    // Decode token
+    const decoded = jwt.verify(token, env.JWT_SECRET);
+    
+    return NextResponse.json({ 
+      message: 'Token decoded successfully',
+      tokenData: decoded
+    });
+  } catch (error) {
+    console.error('Token decode error:', error);
+    return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -61,7 +83,9 @@ export async function POST(req: NextRequest) {
           id: user.id, 
           email: user.email, 
           role: user.role,
-          companyId: user.companyId 
+          companyId: user.companyId,
+          name: user.name,
+          companyName: user.company?.name || null
         }, env.JWT_SECRET, { expiresIn: '7d' });
         
         return NextResponse.json({ 
@@ -102,13 +126,29 @@ export async function POST(req: NextRequest) {
           return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
         }
         
+        // Debug: Log user data
+        console.log('Login - User data:', {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          role: user.role,
+          companyId: user.companyId,
+          company: user.company
+        });
+        
         // Create JWT
-        const token = jwt.sign({ 
+        const jwtPayload = { 
           id: user.id, 
           email: user.email, 
           role: user.role,
-          companyId: user.companyId 
-        }, env.JWT_SECRET, { expiresIn: '7d' });
+          companyId: user.companyId,
+          name: user.name,
+          companyName: user.company?.name || null
+        };
+        
+        console.log('Login - JWT payload:', jwtPayload);
+        
+        const token = jwt.sign(jwtPayload, env.JWT_SECRET, { expiresIn: '7d' });
         
         return NextResponse.json({ 
           message: 'Login successful', 

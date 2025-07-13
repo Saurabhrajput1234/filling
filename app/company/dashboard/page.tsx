@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import type { RootState } from "../../../store/store";
+import { logout } from "../../../store/authSlice";
 import ThemeToggle from "../../components/ThemeToggle";
 
 interface Job {
@@ -33,28 +34,48 @@ interface Application {
 }
 
 export default function CompanyDashboard() {
-  const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
+  const [hydrated, setHydrated] = useState(false);
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
   const router = useRouter();
+  const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch();
+
+  // Helper function to get token from cookies
+  const getToken = () => {
+    return document.cookie.split('; ').find(row => row.startsWith('token='))?.split('=')[1];
+  };
 
   useEffect(() => {
-    if (isAuthenticated) {
+    setHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (isAuthenticated && user?.companyId) {
+      console.log('Company dashboard: Fetching jobs for companyId:', user.companyId);
       fetchJobs();
+    } else {
+      console.log('Company dashboard: Waiting for auth data:', { isAuthenticated, companyId: user?.companyId });
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, user?.companyId]);
 
   const fetchJobs = async () => {
     try {
-      const token = localStorage.getItem("token");
+      setLoading(true);
+      const token = getToken();
+      console.log('Company dashboard: Fetching jobs with token:', token ? 'present' : 'missing');
+      
       const response = await fetch(`/api/jobs?companyId=${user?.companyId}`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
       
       if (response.ok) {
         const data = await response.json();
+        console.log('Company dashboard: Fetched jobs:', data.length);
         setJobs(data);
+      } else {
+        console.error("Failed to fetch jobs:", response.status, response.statusText);
       }
     } catch (error) {
       console.error("Failed to fetch jobs:", error);
@@ -66,7 +87,8 @@ export default function CompanyDashboard() {
   const updateApplicationStatus = async (applicationId: string, status: string) => {
     setUpdatingStatus(applicationId);
     try {
-      const token = localStorage.getItem("token");
+      const token = getToken();
+      
       const response = await fetch(`/api/applications/${applicationId}`, {
         method: "PUT",
         headers: {
@@ -157,10 +179,32 @@ export default function CompanyDashboard() {
     router.push("/company/profile/edit");
   };
 
+  if (!hydrated) return null;
+
   if (!isAuthenticated) {
     router.push("/auth/login");
     return null;
   }
+
+  // Show loading if user data is not yet available
+  if (!user) {
+    return (
+      <main className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-white dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300">
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <p className="mt-4 text-gray-600 dark:text-gray-300">Loading dashboard...</p>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  // Debug: Log user data
+  console.log('Company dashboard - User data:', user);
+  console.log('Company dashboard - User name:', user.name);
+  console.log('Company dashboard - Company object:', user.company);
+  console.log('Company dashboard - Company name:', user.company?.name);
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-white dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300">
@@ -170,13 +214,21 @@ export default function CompanyDashboard() {
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-4 sm:py-6 gap-4">
             <div>
               <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Company Dashboard</h1>
-              <p className="text-gray-600 dark:text-gray-300 mt-1 text-sm sm:text-base">Welcome back, {user?.name}! 👋</p>
+              <p className="text-gray-600 dark:text-gray-300 mt-1 text-sm sm:text-base">
+                Welcome back, {user?.name}! 👋
+                {user?.company?.name && (
+                  <span className="block text-blue-600 dark:text-blue-400 font-medium">
+                    {user.company.name}
+                  </span>
+                )}
+              </p>
             </div>
             <div className="flex items-center justify-center sm:justify-end space-x-2 sm:space-x-4">
               <ThemeToggle />
               <button
                 onClick={() => {
-                  localStorage.removeItem("token");
+                  dispatch(logout());
+                  document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
                   router.push("/");
                 }}
                 className="bg-red-600 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-red-700 transition-colors font-medium flex items-center gap-2 text-sm sm:text-base btn-touch"

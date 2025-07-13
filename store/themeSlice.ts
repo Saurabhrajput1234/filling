@@ -4,21 +4,12 @@ export type Theme = 'light' | 'dark';
 
 interface ThemeState {
   theme: Theme;
+  isHydrated: boolean;
 }
 
-const getInitialTheme = (): Theme => {
-  if (typeof window !== 'undefined') {
-    const savedTheme = localStorage.getItem('theme') as Theme;
-    if (savedTheme) return savedTheme;
-    
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    return prefersDark ? 'dark' : 'light';
-  }
-  return 'light';
-};
-
 const initialState: ThemeState = {
-  theme: getInitialTheme(),
+  theme: 'light', // Always start with light to avoid hydration mismatch
+  isHydrated: false,
 };
 
 const themeSlice = createSlice({
@@ -49,8 +40,11 @@ const themeSlice = createSlice({
         }
       }
     },
+    setHydrated: (state) => {
+      state.isHydrated = true;
+    },
   },
 });
 
-export const { toggleTheme, setTheme } = themeSlice.actions;
+export const { toggleTheme, setTheme, setHydrated } = themeSlice.actions;
 export default themeSlice.reducer; 

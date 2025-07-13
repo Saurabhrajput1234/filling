@@ -49,6 +49,11 @@ export default function LoginPage() {
         throw new Error(data.error || "Login failed");
       }
 
+      // Debug: Log the response data
+      console.log('Login response data:', data);
+      console.log('User data from API:', data.user);
+      console.log('Company data from API:', data.user.company);
+
       // Store token in cookie
       document.cookie = `token=${data.token}; path=/; max-age=2592000`; // 30 days
       

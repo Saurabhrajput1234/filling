@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import type { RootState } from "../../../store/store";
-import NotificationBell from "../../components/NotificationBell";
+import { logout } from "../../../store/authSlice";
 import ThemeToggle from "../../components/ThemeToggle";
+import NotificationBell from "../../components/NotificationBell";
 
 interface Application {
   id: string;
@@ -38,6 +39,7 @@ export default function SeekerDashboard() {
   }, []);
 
   const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch();
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -285,7 +287,8 @@ export default function SeekerDashboard() {
               <NotificationBell />
               <button
                 onClick={() => {
-                  localStorage.removeItem("token");
+                  dispatch(logout());
+                  document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
                   router.push("/");
                 }}
                 className="bg-red-600 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-red-700 transition-colors font-medium flex items-center gap-2 text-sm sm:text-base btn-touch"

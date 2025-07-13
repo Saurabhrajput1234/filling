@@ -11,7 +11,12 @@ export default function EditProfilePage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [hydrated, setHydrated] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -55,6 +60,8 @@ export default function EditProfilePage() {
       setLoading(false);
     }
   };
+
+  if (!hydrated) return null;
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-8">

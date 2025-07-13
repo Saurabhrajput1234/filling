@@ -6,14 +6,21 @@ import jwt from 'jsonwebtoken';
 function verifyToken(req: NextRequest) {
   try {
     const authHeader = req.headers.get('authorization');
+    console.log("Auth header:", authHeader);
+    
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      console.log("No valid authorization header found");
       return null;
     }
     
     const token = authHeader.substring(7);
+    console.log("Token extracted:", token ? "Token exists" : "No token");
+    
     const decoded = jwt.verify(token, process.env.JWT_SECRET!);
+    console.log("Token verified successfully");
     return decoded as any;
   } catch (error) {
+    console.log("Token verification failed:", error);
     return null;
   }
 }
@@ -49,18 +56,27 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
+    console.log("PUT /api/users/[id] called with params:", params);
+    
     // Verify authentication
     const decoded = verifyToken(req);
+    console.log("Decoded token:", decoded);
+    
     if (!decoded) {
+      console.log("Authentication failed - no valid token");
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Check if user is updating their own profile or is admin
+    console.log("Checking permissions - decoded.id:", decoded.id, "params.id:", params.id, "decoded.role:", decoded.role);
+    
     if (decoded.id !== params.id && decoded.role !== 'ADMIN') {
+      console.log("Permission denied - user can only update their own profile");
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
     const data = await req.json();
+    console.log("Update data received:", data);
     
     // Remove sensitive fields that shouldn't be updated directly
     const { id, password, role, companyId, createdAt, ...updateData } = data;
@@ -94,6 +110,8 @@ export async function PUT(
         company: true
       }
     });
+    
+    console.log("User updated successfully:", updatedUser);
     
     // Return user data without password
     const { password: _, ...userData } = updatedUser;

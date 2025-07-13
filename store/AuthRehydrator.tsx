@@ -31,13 +31,27 @@ export default function AuthRehydrator() {
       console.log("Decoded payload:", payload);
       if (payload && payload.id && payload.email && payload.role) {
         console.log("Dispatching login with:", payload);
+        console.log("Payload keys:", Object.keys(payload));
+        console.log("Company name from payload:", payload.companyName);
+        console.log("Name from payload:", payload.name);
+        
+        const userData: any = {
+          id: payload.id,
+          name: payload.name || '',
+          email: payload.email,
+          role: payload.role,
+          companyId: payload.companyId || undefined,
+        };
+        
+        // Add company object if company name exists
+        if (payload.companyName) {
+          userData.company = { name: payload.companyName };
+        }
+        
+        console.log("Restored user data:", userData);
+        console.log("Company object in userData:", userData.company);
         dispatch(login({
-          user: {
-            id: payload.id,
-            name: payload.name || '',
-            email: payload.email,
-            role: payload.role,
-          },
+          user: userData,
           token,
         }));
       }

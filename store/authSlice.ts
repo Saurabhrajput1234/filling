@@ -6,6 +6,9 @@ interface User {
   email: string;
   role: 'SEEKER' | 'COMPANY' | 'ADMIN';
   companyId?: string;
+  company?: {
+    name: string;
+  };
   profile?: string;
   website?: string;
   industry?: string;

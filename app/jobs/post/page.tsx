@@ -139,7 +139,7 @@ export default function PostJobPage() {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
+          "Authorization": `Bearer ${document.cookie.split('; ').find(row => row.startsWith('token='))?.split('=')[1]}`
         },
         body: JSON.stringify(requestData),
       });

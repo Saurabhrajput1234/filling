@@ -20,9 +20,10 @@ interface CompanyProfile {
 }
 
 export default function CompanyProfileEdit() {
-  const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const { user, isAuthenticated, token } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
   const router = useRouter();
+  const [hydrated, setHydrated] = useState(false);
   
   const [formData, setFormData] = useState<CompanyProfile>({
     name: "",
@@ -39,6 +40,10 @@ export default function CompanyProfileEdit() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -97,7 +102,24 @@ export default function CompanyProfileEdit() {
     setSuccess("");
 
     try {
-      const token = localStorage.getItem("token");
+      console.log("Submitting with token:", token);
+      console.log("User ID:", user?.id);
+      
+      // Debug: Test token first
+      if (token) {
+        try {
+          const debugResponse = await fetch('/api/debug/token', {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          const debugData = await debugResponse.json();
+          console.log("Token debug result:", debugData);
+        } catch (debugError) {
+          console.log("Debug request failed:", debugError);
+        }
+      }
+      
       const response = await fetch(`/api/users/${user?.id}`, {
         method: "PUT",
         headers: {
@@ -107,8 +129,11 @@ export default function CompanyProfileEdit() {
         body: JSON.stringify(formData),
       });
 
+      console.log("Response status:", response.status);
+      
       if (response.ok) {
         const updatedUser = await response.json();
+        console.log("Updated user data:", updatedUser);
         // Update Redux state
         dispatch(updateProfile(updatedUser));
         setSuccess("Profile updated successfully!");
@@ -118,6 +143,7 @@ export default function CompanyProfileEdit() {
         }, 2000);
       } else {
         const errorData = await response.json();
+        console.log("Error response:", errorData);
         setError(errorData.error || "Failed to update profile");
       }
     } catch (error) {
@@ -127,6 +153,8 @@ export default function CompanyProfileEdit() {
       setSaving(false);
     }
   };
+
+  if (!hydrated) return null;
 
   if (!isAuthenticated) {
     return null;

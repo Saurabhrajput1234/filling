@@ -34,6 +34,7 @@ export default function JobsPage() {
     experience: "",
     type: "",
   });
+  const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     fetchJobs();
@@ -112,9 +113,18 @@ export default function JobsPage() {
             </div>
             <div className="flex items-center space-x-4">
               <ThemeToggle />
-              <Link href="/auth/login" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm sm:text-base">
-                Login
-              </Link>
+              {!isAuthenticated ? (
+                <Link href="/auth/login" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm sm:text-base">
+                  Login
+                </Link>
+              ) : (
+                <Link
+                  href={user?.role === "COMPANY" ? "/company/dashboard" : "/seeker/dashboard"}
+                  className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm sm:text-base"
+                >
+                  Profile
+                </Link>
+              )}
             </div>
           </div>
         </div>

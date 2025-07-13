@@ -34,7 +34,12 @@ export default function JobDetailsPage({ params }: { params: Promise<{ jobId: st
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [applicationMessage, setApplicationMessage] = useState("");
+  const [hydrated, setHydrated] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
 
   useEffect(() => {
     fetchJob();
@@ -111,6 +116,8 @@ export default function JobDetailsPage({ params }: { params: Promise<{ jobId: st
       setApplying(false);
     }
   };
+
+  if (!hydrated) return null;
 
   if (loading) {
     return (
@@ -214,9 +221,18 @@ export default function JobDetailsPage({ params }: { params: Promise<{ jobId: st
             </div>
             <div className="flex items-center space-x-4">
               <ThemeToggle />
-              <Link href="/auth/login" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                Login
-              </Link>
+              {!isAuthenticated ? (
+                <Link href="/auth/login" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                  Login
+                </Link>
+              ) : (
+                <Link
+                  href={user?.role === "COMPANY" ? "/company/dashboard" : "/seeker/dashboard"}
+                  className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                >
+                  Profile
+                </Link>
+              )}
             </div>
           </div>
         </div>

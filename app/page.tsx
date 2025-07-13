@@ -4,9 +4,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import ThemeToggle from "./components/ThemeToggle";
+import { useSelector } from "react-redux";
+import type { RootState } from "../store/store";
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-white dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300">
@@ -26,8 +29,19 @@ export default function Home() {
               <a href="#how-it-works" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 rounded-md text-sm lg:text-base font-medium transition-colors">How it Works</a>
               <a href="#testimonials" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 rounded-md text-sm lg:text-base font-medium transition-colors">Testimonials</a>
               <ThemeToggle />
-              <Link href="/auth/login" className="bg-blue-600 text-white px-4 lg:px-5 py-2 rounded-lg text-sm lg:text-base font-semibold shadow hover:bg-blue-700 transition btn-touch">Login</Link>
-              <Link href="/auth/register" className="bg-green-600 text-white px-4 lg:px-5 py-2 rounded-lg text-sm lg:text-base font-semibold shadow hover:bg-green-700 transition btn-touch">Sign Up</Link>
+              {!isAuthenticated ? (
+                <>
+                  <Link href="/auth/login" className="bg-blue-600 text-white px-4 lg:px-5 py-2 rounded-lg text-sm lg:text-base font-semibold shadow hover:bg-blue-700 transition btn-touch">Login</Link>
+                  <Link href="/auth/register" className="bg-green-600 text-white px-4 lg:px-5 py-2 rounded-lg text-sm lg:text-base font-semibold shadow hover:bg-green-700 transition btn-touch">Sign Up</Link>
+                </>
+              ) : (
+                <Link
+                  href={user?.role === "COMPANY" ? "/company/dashboard" : "/seeker/dashboard"}
+                  className="bg-blue-700 text-white px-4 lg:px-5 py-2 rounded-lg text-sm lg:text-base font-semibold shadow hover:bg-blue-800 transition btn-touch"
+                >
+                  Profile
+                </Link>
+              )}
             </div>
 
             {/* Mobile menu button */}
@@ -71,20 +85,32 @@ export default function Home() {
                   Testimonials
                 </a>
                 <div className="pt-2 space-y-2">
-                  <Link 
-                    href="/auth/login" 
-                    onClick={() => setIsMenuOpen(false)}
-                    className="bg-blue-600 text-white block px-3 py-3 rounded-md text-base font-semibold shadow hover:bg-blue-700 transition btn-touch"
-                  >
-                    Login
-                  </Link>
-                  <Link 
-                    href="/auth/register" 
-                    onClick={() => setIsMenuOpen(false)}
-                    className="bg-green-600 text-white block px-3 py-3 rounded-md text-base font-semibold shadow hover:bg-green-700 transition btn-touch"
-                  >
-                    Sign Up
-                  </Link>
+                  {!isAuthenticated ? (
+                    <>
+                      <Link 
+                        href="/auth/login" 
+                        onClick={() => setIsMenuOpen(false)}
+                        className="bg-blue-600 text-white block px-3 py-3 rounded-md text-base font-semibold shadow hover:bg-blue-700 transition btn-touch"
+                      >
+                        Login
+                      </Link>
+                      <Link 
+                        href="/auth/register" 
+                        onClick={() => setIsMenuOpen(false)}
+                        className="bg-green-600 text-white block px-3 py-3 rounded-md text-base font-semibold shadow hover:bg-green-700 transition btn-touch"
+                      >
+                        Sign Up
+                      </Link>
+                    </>
+                  ) : (
+                    <Link
+                      href={user?.role === "COMPANY" ? "/company/dashboard" : "/seeker/dashboard"}
+                      onClick={() => setIsMenuOpen(false)}
+                      className="bg-blue-700 text-white block px-3 py-3 rounded-md text-base font-semibold shadow hover:bg-blue-800 transition btn-touch"
+                    >
+                      Profile
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>
@@ -95,8 +121,18 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-blue-100 via-indigo-100 to-white dark:from-gray-800 dark:via-gray-700 dark:to-gray-900 py-16 sm:py-20 lg:py-28 overflow-hidden transition-colors duration-300">
         <div className="absolute inset-0 pointer-events-none select-none">
-          <svg width="100%" height="100%" viewBox="0 0 1440 320" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute bottom-0 left-0 w-full h-32 sm:h-40 opacity-30 dark:opacity-10">
-            <path fill="#6366F1" fillOpacity="0.1" d="M0,224L48,202.7C96,181,192,139,288,144C384,149,480,203,576,197.3C672,192,768,128,864,128C960,128,1056,192,1152,197.3C1248,203,1344,149,1392,122.7L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+          <svg 
+            className="absolute bottom-0 left-0 w-full h-32 sm:h-40 opacity-100 dark:opacity-100" 
+            viewBox="0 0 1440 320" 
+            fill="none" 
+            xmlns="http://www.w3.org/2000/svg"
+            preserveAspectRatio="none"
+          >
+            <path 
+              fill="#6366F1" 
+              fillOpacity="0.1" 
+              d="M0,224L48,202.7C96,181,192,139,288,144C384,149,480,203,576,197.3C672,192,768,128,864,128C960,128,1056,192,1152,197.3C1248,203,1344,149,1392,122.7L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+            />
           </svg>
         </div>
         <div className="container-responsive relative z-10">
@@ -108,16 +144,16 @@ export default function Home() {
             <p className="text-lg sm:text-xl lg:text-2xl text-gray-700 dark:text-gray-300 mb-8 sm:mb-10 max-w-3xl mx-auto animate-fade-in-up delay-100 px-4">
               Connect talented professionals with amazing opportunities. Whether you're looking for your next career move or seeking the perfect team member, we've got you covered.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up delay-200 px-4">
+            <div className="flex flex-col sm:flex-row gap-6 justify-center animate-fade-in-up delay-200 px-4">
               <Link 
                 href="/jobs" 
-                className="bg-blue-600 text-white px-6 sm:px-8 lg:px-10 py-4 sm:py-5 rounded-xl text-lg sm:text-xl font-bold shadow-lg hover:bg-blue-700 hover:shadow-2xl transition-all duration-300 btn-touch"
+                className="bg-blue-600 text-white px-12 sm:px-16 lg:px-20 py-6 sm:py-8 rounded-2xl text-2xl sm:text-3xl font-bold shadow-xl hover:bg-blue-700 hover:shadow-2xl transition-all duration-300 btn-touch min-w-[200px]"
               >
                 Browse Jobs
               </Link>
               <Link 
                 href="/auth/register" 
-                className="bg-green-600 text-white px-6 sm:px-8 lg:px-10 py-4 sm:py-5 rounded-xl text-lg sm:text-xl font-bold shadow-lg hover:bg-green-700 hover:shadow-2xl transition-all duration-300 btn-touch"
+                className="bg-green-600 text-white px-12 sm:px-16 lg:px-20 py-6 sm:py-8 rounded-2xl text-2xl sm:text-3xl font-bold shadow-xl hover:bg-green-700 hover:shadow-2xl transition-all duration-300 btn-touch min-w-[200px]"
               >
                 Post a Job
               </Link>
